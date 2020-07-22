@@ -12,5 +12,13 @@
         </div>
       </div>
     {% endfor %}
+
+    <form method="GET" action="">
+        {% csrf_token %}
+        <label>Город:</label><br>
+        <input type="text" name="city"><br>
+        <input type="text" name="language">
+        <button type="submit">submit</button>
+    </form>
 {% endblock %}
     
