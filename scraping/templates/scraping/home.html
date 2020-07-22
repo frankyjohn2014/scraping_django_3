@@ -11,14 +11,19 @@
           <p>{{obj.city.name}} | {{ obj.language.name }} | <small>{{obj.timestamp|date:"d-m-Y" }}</small></p>
         </div>
       </div>
+    {% empty %}
+        <h3 class="mx-auto">К сожалению, по Вашему запросу, ничего не найдено.</h3>
     {% endfor %}
-
+<div class="row">
+  <div class="col-md-6 mx-auto">
     <form method="GET" action="">
-        {% csrf_token %}
-        <label>Город:</label><br>
-        <input type="text" name="city"><br>
-        <input type="text" name="language">
-        <button type="submit">submit</button>
+      <div class="form-group">
+        {{ form.as_p }}
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+  </div>
+</div>
+
 {% endblock %}
     
