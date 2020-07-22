@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for obj in object_list %}
+    <br>
+    <div class="card my-3">
+        <div class="card-header"><a href="{{ obj.url }}">{{ obj.title }}</a></div>
+        <div class="card-body">
+          <h5 class="card-title"></h5>
+          <p class="card-text">{{ obj.description }}</p>
+          <p>{{obj.city.name}} | {{ obj.language.name }} | <small>{{obj.timestamp|date:"d-m-Y" }}</small></p>
+        </div>
+      </div>
+    {% endfor %}
+{% endblock %}
+    
