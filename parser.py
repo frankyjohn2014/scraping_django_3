@@ -3,14 +3,24 @@ from bs4 import BeautifulSoup as BS
 import codecs
 import time
 import datetime
+from random import randint
 
-headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36',
+headers = [{'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36',
            'Accept':'text/html, application/xhtml+xml, application/xml;q=0.9,*/*;q=0.8'
-}
+},
+{
+'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'    
+},
+{
+'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'
+},
+{
+'User-Agent':'Mozilla/5.0 (Windows NT 5.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
+}]
 
 def tut_pars(start_url):
     session = requests.Session()
-    req = session.get(start_url, headers=headers)
+    req = session.get(start_url, headers=headers[randint(0,3)])
     bsObj = BS(req.content, "html.parser")
     jobs = []
     url = []
@@ -23,7 +33,7 @@ def tut_pars(start_url):
     time.sleep(2)
     for now_url in url:
         # print(now_url)
-        req = session.get(now_url, headers=headers)
+        req = session.get(now_url, headers=headers[randint(0,3)])
         time.sleep(2)
         bsObj = BS(req.content, "html.parser")
         all_div = bsObj.find_all('div',attrs={"class":"vacancy-serp-item"})
@@ -55,7 +65,7 @@ def tut_pars(start_url):
 
 def bel_pars(start_url):
     session = requests.Session()
-    req = session.get(start_url, headers=headers)
+    req = session.get(start_url, headers=headers[randint(0,3)])
     bsObj = BS(req.content, "html.parser")
     jobs = []
     pag_url = []
@@ -73,7 +83,7 @@ def bel_pars(start_url):
     time.sleep(2)
     for now_url in pag_url:
         # print(now_url)
-        req = session.get(now_url, headers=headers)
+        req = session.get(now_url, headers=headers[randint(0,3)])
         time.sleep(2)
         bsObj = BS(req.content, "html.parser")
         all_div = bsObj.find_all('article',attrs={"class":"job"})
