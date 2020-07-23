@@ -3,10 +3,6 @@ from .models import Vacancy
 from .forms import FindForm
 
 def home_view(request):
-    print("12133")
-        print("12133")
-            print("12133")
-            
     print(request.GET)
     form = FindForm()
     city = request.GET.get('city')
