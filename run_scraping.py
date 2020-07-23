@@ -9,8 +9,9 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'scraping_service.settings'
 import django
 
 
-django.setup()
 
+django.setup()
+from django.db import DatabaseError
 from parser import *
 from scraping.models import Vacancy,City,Language
 parsers = (
@@ -18,6 +19,7 @@ parsers = (
     (bel_pars, 'https://belmeta.com/vacansii?q=Python&l=')
 )
 city = City.objects.filter(slug='minsk')
+language = Language.objects.filter(slug='Python')
 print(city)
 jobs = []
 for func,url in parsers:
@@ -27,3 +29,9 @@ for func,url in parsers:
     # h.write(str(jobs))
     # h.close()
 
+for job in jobs:
+    v = Vacancy(**job)
+    try:
+        v.save()    
+    except DatabaseError:
+        pass

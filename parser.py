@@ -53,7 +53,7 @@ def tut_pars(start_url):
             #     print('-')
             # date = div.find('span', attrs={"class":"vacancy-serp-item__publication-date"}) # title #href
             # print(date.text)
-            jobs.append({'href':href.get('href'),
+            jobs.append({'url':href.get('href'),
                         'title': title.text,
                         'description':descrp.text,
                         'company':employer.text})
@@ -104,7 +104,7 @@ def bel_pars(start_url):
             decript = decript_with_spaces.strip()
             # print(decript)
             # print(decript)
-            jobs.append({'href':href,
+            jobs.append({'url':href,
                         'title': title,
                         'description':decript,
                         'company':company})
