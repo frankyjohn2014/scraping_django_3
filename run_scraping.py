@@ -18,9 +18,10 @@ parsers = (
     (tut_pars, 'https://jobs.tut.by/search/vacancy?area=1002&st=searchVacancy&fromSearch=true&text=Python'),
     (bel_pars, 'https://belmeta.com/vacansii?q=Python&l=')
 )
-city = City.objects.filter(slug='minsk')
-language = Language.objects.filter(slug='Python')
+city = City.objects.filter(slug='minsk').first()
+language = Language.objects.filter(slug='python').first()
 print(city)
+print(language)
 jobs = []
 for func,url in parsers:
     j = func(url)
@@ -30,7 +31,7 @@ for func,url in parsers:
     # h.close()
 
 for job in jobs:
-    v = Vacancy(**job)
+    v = Vacancy(**job, city=city, language=language)
     try:
         v.save()    
     except DatabaseError:
