@@ -19,10 +19,6 @@ jobs,errors = [],[]
 start = time.time()
 loop = asyncio.get_event_loop()
 
-
-
-
-
 async def main(value):
     func, url, city, language = value
     job, err = await loop.run_in_executor(None, func, url, city, language)
@@ -56,11 +52,6 @@ def get_urls(_settings):
 
 settings = get_settings()
 url_list = get_urls(settings)
-
-
-
-
-
 
 #no async function
 
