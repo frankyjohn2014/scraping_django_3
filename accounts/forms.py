@@ -8,8 +8,8 @@ class UserLoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
 
     def clean(self, *args, **kwargs):
-        email = self.cleaned_data.get('email')
-        password = self.cleaned_data.get('password')
+        email = self.cleaned_data.get('email').strip()
+        password = self.cleaned_data.get('password').strip()
 
         if email and password:
             qs = User.objects.filter(email=email)
@@ -20,4 +20,4 @@ class UserLoginForm(forms.Form):
             user = authenticate(email=email,password=password)
             if not user:
                 raise forms.ValidationError('Данный аккаунт отключен')
-        return super(UserLoginForm, self.clean(*args,**kwargs))
+        return super(UserLoginForm, self).clean(*args,**kwargs)
