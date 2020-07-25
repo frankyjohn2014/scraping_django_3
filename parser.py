@@ -18,11 +18,11 @@ headers = [{'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (K
 'User-Agent':'Mozilla/5.0 (Windows NT 5.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
 }]
 
-def tut_pars(start_url):
+def tut_pars(start_url, city=None, language=None):
     session = requests.Session()
     if start_url:
         req = session.get(start_url, headers=headers[randint(0,3)])
-        print(req.status_code)
+        # print(req.status_code)
         if req.status_code == 200:
             bsObj = BS(req.content, "html.parser")
             jobs = []
@@ -61,7 +61,8 @@ def tut_pars(start_url):
                         jobs.append({'url':href.get('href'),
                                     'title': title.text,
                                     'description':descrp.text,
-                                    'company':employer.text})
+                                    'company':employer.text,
+                                    'city_id':city, 'language_id':language})
                 else:
                     errors.append({'url': url, 'title': "Div does not exists"})
         else:
@@ -71,7 +72,7 @@ def tut_pars(start_url):
             # handle.close  
     return jobs,errors
 
-def bel_pars(start_url):
+def bel_pars(start_url, city=None, language=None):
     session = requests.Session()
     if start_url:
         req = session.get(start_url, headers=headers[randint(0,3)])
@@ -119,7 +120,8 @@ def bel_pars(start_url):
                         jobs.append({'url':href,
                                     'title': title,
                                     'description':decript,
-                                    'company':company})
+                                    'company':company,
+                                    'city_id':city, 'language_id':language})
                 else:
                     errors.append({'url': url, 'title': "Div does not exists"})
         else:
