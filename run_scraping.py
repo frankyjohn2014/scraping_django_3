@@ -15,11 +15,19 @@ from django.db import DatabaseError
 from parser import *
 from scraping.models import Vacancy,City,Language,Error,Url
 
-
+jobs,errors = [],[]
 start = time.time()
 loop = asyncio.get_event_loop()
-tmp_tasks = []
 
+
+
+
+
+async def main(value):
+    func, url, city, language = value
+    job, err = await loop.run_in_executor(None, func, url, city, language)
+    errors.extend(err)
+    jobs.extend(job)
 
 User = get_user_model()
 
@@ -45,26 +53,41 @@ def get_urls(_settings):
         urls.append(tmp)
     return urls
 
+
 settings = get_settings()
 url_list = get_urls(settings)
 
 
 
-jobs,errors = [],[]
 
 
 
-for data in url_list:
-    for func,key in parsers:
-        url = data['url_data'][key]
+#no async function
 
-        j,e = func(url, city=data['city'], language=data['language'])
-        jobs += j
-        errors += e
+# for data in url_list:
+#     for func,key in parsers:
+#         url = data['url_data'][key]
+
+#         j,e = func(url, city=data['city'], language=data['language'])
+#         jobs += j
+#         errors += e
         # h = codecs.open('pars.txt', 'w', 'utf-8')
         # h.write(str(jobs))
         # h.close()
+tmp_tasks = [(func, data['url_data'][key],data['city'], data['language'])
+            for data in url_list
+            for func, key in parsers 
+            ]
+
+tasks = asyncio.wait([loop.create_task(main(f)) for f in tmp_tasks])
+
+loop.run_until_complete(tasks)
+loop.close()
+
+#no async
 # print(time.time()-start) #33sek
+
+# print(time.time()-start) #20 sek async
 for job in jobs:
     v = Vacancy(**job)
     try:
