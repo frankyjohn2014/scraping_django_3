@@ -9,7 +9,7 @@ from django.db.models import Q
 import django
 import time
 import asyncio
-
+import datetime as dt
 django.setup()
 from django.db import DatabaseError
 from parser import *
@@ -88,4 +88,11 @@ for job in jobs:
         pass
 
 if errors:
-    er = Error(data=f'errors:{errors}').save()
+    qs = Error.objects.filter(timestamp=dt.date.today())
+    if qs.exists():
+        err = qs.first()
+        data = err.data
+        err.data.update({'errors':errors})
+        err.save()
+    else:
+        er = Error(data=f'errors:{errors}').save()
