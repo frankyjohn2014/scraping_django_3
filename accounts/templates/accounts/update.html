@@ -34,7 +34,7 @@
 
       </div>
     </h4>
-    <form method="POST" action="">
+    <form method="POST" action="{% url 'accounts:contact' %}">
         {% csrf_token %}
       <div class="form-group">
         {{ contact_form.as_p }}

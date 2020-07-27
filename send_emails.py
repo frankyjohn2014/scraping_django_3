@@ -58,13 +58,22 @@ _html = ''
 
 if qs.exists():
     error = qs.first()
-    data = error.data
+    data = error.data['errors']
 
     for i in data:
         _html += f'<p><a href="{ i["url"] }">Error: { i["title"] }</a></p><br>'
 
     subject = "Ошибки скрапинга {today}"
     text_content = "Ошибки скрапинга"
+
+    data = error.data['user_data']
+
+    for i in data:
+        _html += f'<p>Error: { i["title"] }</p><br>'
+
+    subject = "Ошибки скрапинга {today}"
+    text_content = "Ошибки скрапинга"
+
 
 qs = Url.objects.all().values(send_email=True).values('city','language')
 urls_dct = {(i['city_id'],i['language_id']): True for i in qs}
