@@ -10,7 +10,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'scraping_service.settings'
 django.setup()
 from scraping_service.settings import EMAIL_HOST_USER
 
-from scraping.models import Vacancy, Error
+from scraping.models import Vacancy, Error, Url
 ADMIN_USER = EMAIL_HOST_USER
 
 subject = "Рассылка вакансий за {today} "
@@ -18,8 +18,6 @@ text_content = "Рассылка вакансий за {today}"
 from_email = EMAIL_HOST_USER
 
 empty = '<h2>К сожалению на сегодня Вашим предпочтениям данных нет</h2>'
-
-
 
 User = get_user_model()
 qs = User.objects.filter(send_email=True).values('city','language','email')
@@ -53,17 +51,34 @@ if users_dct:
             msg.send()
 
 qs = Error.objects.filter(timestamp=today)
+subject = ''
+text_content = ''
+to = ADMIN_USER
+_html = ''
+
 if qs.exists():
     error = qs.first()
     data = error.data
-    _html = ''
+
     for i in data:
-        _html += f'<p><a href="{ i["url"] }">Error: { i["title"] }</a></p>'
+        _html += f'<p><a href="{ i["url"] }">Error: { i["title"] }</a></p><br>'
 
     subject = "Ошибки скрапинга {today}"
     text_content = "Ошибки скрапинга"
-    to = ADMIN_USER
-     
+
+qs = Url.objects.all().values(send_email=True).values('city','language')
+urls_dct = {(i['city_id'],i['language_id']): True for i in qs}
+urls_err = ''
+
+for keys in users_dct.keys():
+    if keys not in urls_dct:
+        urls_err += f'<p>Для города: {keys[0]} и ЯП: {keys[1]} отсутствуют урлы</p><br>'
+
+if urls_err:
+    subject += ' Отсутствующие урлы'
+    _html += urls_err
+
+if subject:
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(_html, "text/html")
     msg.send()
