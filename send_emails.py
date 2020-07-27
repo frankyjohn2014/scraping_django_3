@@ -67,12 +67,15 @@ if qs.exists():
     text_content = "Ошибки скрапинга"
 
     data = error.data['user_data']
+    if data:
+        _html += '<hr>'
+        _html += '<h2>Пожелания пользователей</h2>'
+        for i in data:
+            _html += f'<p>Город: { i["city"] }, Специальность: { i["language"] }, 
+            Email: { i["email"] }</p><br>'
 
-    for i in data:
-        _html += f'<p>Error: { i["title"] }</p><br>'
-
-    subject = "Ошибки скрапинга {today}"
-    text_content = "Ошибки скрапинга"
+        subject = f"Пожелания пользователей {today}"
+        text_content = "Ошибки скрапинга"
 
 
 qs = Url.objects.all().values(send_email=True).values('city','language')
@@ -81,7 +84,8 @@ urls_err = ''
 
 for keys in users_dct.keys():
     if keys not in urls_dct:
-        urls_err += f'<p>Для города: {keys[0]} и ЯП: {keys[1]} отсутствуют урлы</p><br>'
+        if keys[0] and keys[1]:
+            urls_err += f'<p>Для города: {keys[0]} и ЯП: {keys[1]} отсутствуют урлы</p><br>'
 
 if urls_err:
     subject += ' Отсутствующие урлы'

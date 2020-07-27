@@ -11,5 +11,5 @@ urlpatterns = [
     path('register/',register_view,name='register'),
     path('update/',update_view,name='update'),
     path('delete/', delete_view, name='delete'),
-    path('contact/', contact, name='contact')
+    path('contact/', contact, name='contact'),
 ]
