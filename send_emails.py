@@ -71,8 +71,7 @@ if qs.exists():
         _html += '<hr>'
         _html += '<h2>Пожелания пользователей</h2>'
         for i in data:
-            _html += f'<p>Город: { i["city"] }, Специальность: { i["language"] }, 
-            Email: { i["email"] }</p><br>'
+            _html += f'<p>Город: { i["city"] }, Специальность: { i["language"] }, Email: { i["email"] }</p><br>'
 
         subject = f"Пожелания пользователей {today}"
         text_content = "Ошибки скрапинга"
