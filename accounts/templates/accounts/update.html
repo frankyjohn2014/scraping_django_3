@@ -22,18 +22,21 @@
         {% csrf_token %}
       <button type="submit" class="btn btn-danger my-3">Удалить</button>
       <p>
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsed" aria-expanded="false" aria-controls="collapseExample">
+        <h6>Если вашей вакансии нет, вы можете её предложить добавить администратору</h6>
+        <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapsed" aria-expanded="false" aria-controls="collapseExample">
           Показать форму 
         </button>
       </p>
+      
       <div class="collapse" id="collapsed">
         <div class="card card-body">
           <div class="row my-5">
             <div class="col-md-8 mx-auto">
-              <h4 class="my-2">Если вы не нашли подходящий набор Город, Специальность, 
+
+              <h6 class="my-2">Если вы не нашли подходящий набор Город, Специальность, 
                 Вы можете заполнить форму ниже с Вашими пожеланиями. После того,
                 как необходимые данные будут добавлены, Вы получите письмо на указанный Вам email
-              </h4>
+              </h6>
               <form method="POST" action="{% url 'accounts:contact' %}">
                   {% csrf_token %}
                 <div class="form-group">
@@ -48,8 +51,4 @@
     </form>
   </div>
 </div>
-
-
-
-
 {% endblock %}
