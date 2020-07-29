@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from scraping.views import home_view,list_view
+from scraping.views import home_view,list_view,DView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
     path('list/', list_view, name='list'),
-    path('accounts/',include('accounts.urls'), name='accounts')
+    path('accounts/',include('accounts.urls'), name='accounts'),
+    path('detail/<int:pk>/', DView.as_view(), name='detail'),
 ]

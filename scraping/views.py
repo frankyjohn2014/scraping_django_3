@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Vacancy
 from .forms import FindForm
 from django.core.paginator import Paginator
+from django.views.generic.detail import DetailView
 
 def home_view(request):
     print(request.GET)
@@ -32,3 +33,8 @@ def list_view(request):
         page_obj = paginator.get_page(page_number)
         context['object_list'] = page_obj
     return render(request,'scraping/list.html', context)
+
+
+class DView(DetailView):
+    queryset = Vacancy.objects.all()
+    template_name = 'scraping/detail_view.html'
