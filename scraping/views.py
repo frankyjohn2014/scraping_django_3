@@ -3,6 +3,7 @@ from .models import Vacancy
 from .forms import FindForm
 from django.core.paginator import Paginator
 from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 
 def home_view(request):
     print(request.GET)
@@ -12,7 +13,7 @@ def home_view(request):
 
 
 def list_view(request):
-    print(request.GET)
+    # print(request.GET)
     form = FindForm()
     city = request.GET.get('city')
     language = request.GET.get('language')
@@ -38,3 +39,30 @@ def list_view(request):
 class DView(DetailView):
     queryset = Vacancy.objects.all()
     template_name = 'scraping/detail_view.html'
+
+class VList(ListView):
+    model = Vacancy
+    template_name = 'scraping/list.html'
+    form = FindForm() 
+    paginate_by = 6
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['city'] = self.request.GET.get('city')
+        context['language'] = self.request.GET.get('language')
+        context['form'] = self.form
+        return context
+    
+    def get_queryset(self, **kwargs):
+        city = self.request.GET.get('city')
+        language = self.request.GET.get('language')
+        qs = []
+        if city or language:
+            _filter = {}
+            if city:
+                _filter['city__slug'] = city
+            if language:
+                _filter['language__slug'] = language
+
+            qs = Vacancy.objects.filter(**_filter)
+        return qs
