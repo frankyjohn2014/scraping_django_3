@@ -37,10 +37,7 @@ def tut_pars(start_url, city=None, language=None):
             time.sleep(2)
             for now_url in url:
                 # print(now_url)
-                req = session.get(now_url, headers=headers[randint(0,3)])
-                time.sleep(2)
-                bsObj = BS(req.content, "html.parser")
-                all_div = bsObj.find_all('div',attrs={"class":"vacancy-serp-item"})
+                req_div = bsObj.find_all('div',attrs={"class":"vacancy-serp-item"})
                 if all_div:
                     for div in all_div:
                         title = div.find('a', attrs={"data-qa":"vacancy-serp__vacancy-title"}) # title #href

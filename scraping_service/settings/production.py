@@ -164,3 +164,8 @@ EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 SECRET_KEY = SECRET_KEY
 db = dj_database_url.config()
 DATABASES['default'].update(db)
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIZALIZER = 'json'
