@@ -4,8 +4,9 @@ from .forms import FindForm,VForm
 from django.core.paginator import Paginator
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy,reverse
+from django.contrib import messages
 def home_view(request):
     print(request.GET)
     form = FindForm()
@@ -26,8 +27,7 @@ def list_view(request):
             _filter['city__slug'] = city
         if language:
             _filter['language__slug'] = language
-
-        qs = Vacancy.objects.filter(**_filter)
+        qs = Vacancy.objects.filter(**_filter).select_related('city','language')
 
         paginator = Paginator(qs, 10) # Show 25 contacts per page.
 
@@ -65,7 +65,7 @@ class VList(ListView):
             if language:
                 _filter['language__slug'] = language
 
-            qs = Vacancy.objects.filter(**_filter)
+            qs = Vacancy.objects.filter(**_filter).select_related('city','language')
         return qs
 
 class VCreate(CreateView):
@@ -81,3 +81,13 @@ class VUpdate(UpdateView):
     form_class = VForm
     template_name = 'scraping/create_view.html'
     success_url = reverse_lazy('home')
+
+class VDelete(DeleteView):
+    model = Vacancy
+    template_name = 'scraping/delete.html'
+    success_url = reverse_lazy('home')
+
+    # удаление без запроса подтверждения
+    def get(self, request, *args,**kwargs):
+        messages.success(request, 'Вакансия успешно удалена')
+        return self.post(request,*args,**kwargs)
