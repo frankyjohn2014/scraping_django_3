@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from .models import Vacancy
-from .forms import FindForm
+from .forms import FindForm,VForm
 from django.core.paginator import Paginator
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-
+from django.views.generic.edit import CreateView, UpdateView
+from django.urls import reverse_lazy,reverse
 def home_view(request):
     print(request.GET)
     form = FindForm()
@@ -66,3 +67,17 @@ class VList(ListView):
 
             qs = Vacancy.objects.filter(**_filter)
         return qs
+
+class VCreate(CreateView):
+    model = Vacancy
+    # fields = '__all__'
+    form_class = VForm
+    template_name = 'scraping/create_view.html'
+    success_url = reverse_lazy('home')
+
+class VUpdate(UpdateView):
+    model = Vacancy
+    # fields = '__all__'
+    form_class = VForm
+    template_name = 'scraping/create_view.html'
+    success_url = reverse_lazy('home')
